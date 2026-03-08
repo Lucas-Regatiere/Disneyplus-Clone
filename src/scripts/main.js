@@ -1,78 +1,64 @@
-document.addEventListener('DOMContentLoaded', function(){
+document.addEventListener('DOMContentLoaded', function() {
+    // Seleção dos elementos
     const buttons = document.querySelectorAll('[data-tab-button]');
     const questions = document.querySelectorAll('[data-faq-question]');
-
+    const header = document.querySelector('header');
     const heroSection = document.querySelector('.hero');
-    const alturaHero = heroSection.clientHeight;
 
-    window.addEventListener('scroll', function() {
-        const posicaoAtual = window.scrollY;
+    // --- Lógica do Header (Scroll) ---
+    if (heroSection && header) {
+        const alturaHero = heroSection.clientHeight;
 
-        if (posicaoAtual < alturaHero) {
-            ocultaElementosDoHeader();
-        } else {
-            exibeElementosDoHeader();
-        }
-    })
+        window.addEventListener('scroll', function() {
+            const posicaoAtual = window.scrollY;
 
-    // Seção de atrações, programação das abasS
-    for (let i = 0; i < buttons.length; i++){
-        buttons[i].addEventListener('click', function(botao) {
-            const abaAlvo = botao.target.dataset.tabButton;
+            if (posicaoAtual < alturaHero) {
+                header.classList.add('header--is-hidden');
+            } else {
+                header.classList.remove('header--is-hidden');
+            }
+        });
+    }
+
+    // --- Seção de Atrações (Abas) ---
+    buttons.forEach(botao => {
+        botao.addEventListener('click', function(e) {
+            const abaAlvo = e.target.dataset.tabButton;
             const aba = document.querySelector(`[data-tab-id=${abaAlvo}]`);
+            
             escondeTodasAbas();
-            aba.classList.add('shows__list--is-active');
+            if (aba) aba.classList.add('shows__list--is-active');
+            
             removeBotaoAtivo();
-            botao.target.classList.add('shows__tabs__button--is-active');
-        })
-    }
-    
-    // Seção FAQ, accordion
-    for (let i = 0; i < questions.length; i++) {
-        questions[i].addEventListener('click', abreOuFechaResposta);
-    }
+            e.target.classList.add('shows__tabs__button--is-active');
+        });
+    });
 
-})
+    // --- Seção FAQ (Accordion) ---
+    questions.forEach(question => {
+        question.addEventListener('click', abreOuFechaResposta);
+    });
+});
 
-function ocultaElementosDoHeader() {
-    const header = document.querySelector('header');
-    header.classList.add('header--is-hidden');
-}
-
-function exibeElementosDoHeader() {
-    const header = document.querySelector('header');
-    header.classList.remove('header--is-hidden');
-}
-
+// Funções Auxiliares
 function abreOuFechaResposta(event) {
     const classe = 'faq__questions__item--is-open';
-    
-    // Selecionamos o elemento que recebeu o clique original
-    // currentTarget garante que pegamos a div [data-faq-question]
-    const elementoClique = event.currentTarget;
-    const elementoPai = elementoClique.parentNode
-
-    elementoPai.classList.toggle(classe);
-    // O closest garante que, mesmo clicando no texto ou no ícone, 
-    // ele suba até encontrar o <li> (faq__questions__item)
-    const elementoPai = elemento.target.closest('.faq__questions__item');
-    // const elementoPai = elemento.target.parentNode;
+    // currentTarget é sempre a div [data-faq-question] que recebeu o evento
+    const elementoPai = event.currentTarget.parentNode;
 
     elementoPai.classList.toggle(classe);
 }
 
 function removeBotaoAtivo() {
     const buttons = document.querySelectorAll('[data-tab-button]');
-
-    for (let i = 0; i < buttons.length; i++) {
-        buttons[i].classList.remove('shows__tabs__button--is-active');
-    }
+    buttons.forEach(button => {
+        button.classList.remove('shows__tabs__button--is-active');
+    });
 }
 
 function escondeTodasAbas() {
     const tabsContainer = document.querySelectorAll('[data-tab-id]');
-
-    for (let i = 0; i < tabsContainer.length; i++){
-        tabsContainer[i].classList.remove('shows__list--is-active')
-    }
+    tabsContainer.forEach(tab => {
+        tab.classList.remove('shows__list--is-active');
+    });
 }
