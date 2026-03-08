@@ -44,8 +44,15 @@ function exibeElementosDoHeader() {
     header.classList.remove('header--is-hidden');
 }
 
-function abreOuFechaResposta(elemento) {
+function abreOuFechaResposta(event) {
     const classe = 'faq__questions__item--is-open';
+    
+    // Selecionamos o elemento que recebeu o clique original
+    // currentTarget garante que pegamos a div [data-faq-question]
+    const elementoClique = event.currentTarget;
+    const elementoPai = elementoClique.parentNode
+
+    elementoPai.classList.toggle(classe);
     // O closest garante que, mesmo clicando no texto ou no ícone, 
     // ele suba até encontrar o <li> (faq__questions__item)
     const elementoPai = elemento.target.closest('.faq__questions__item');
