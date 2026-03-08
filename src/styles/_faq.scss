@@ -32,11 +32,10 @@
             }
 
             &__answer {
-                max-height: 0; // Mudamos de height para max-height
+                height: 0;
                 overflow: hidden;
                 padding: 0 24px;
-                transition: max-height 0.5s ease, padding 0.5s ease; // Ajuste na transição
-                opacity: 0; // Adiciona um fade in
+                transition: height, .5s ease;
             }
 
             &--is-open {
@@ -45,8 +44,7 @@
                 }
                 
                 .faq__questions__item__answer {
-                    height: 500px; // Um valor maior que qualquer resposta
-                    padding-top: 24px; // Dá um respiro entre a pergunta e a resposta
+                    height: auto;
                     padding-bottom: 24px;
                     transition: height, .5s ease;
                 }
