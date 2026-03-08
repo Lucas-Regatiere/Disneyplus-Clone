@@ -46,7 +46,10 @@ function exibeElementosDoHeader() {
 
 function abreOuFechaResposta(elemento) {
     const classe = 'faq__questions__item--is-open';
-    const elementoPai = elemento.target.parentNode;
+    // O closest garante que, mesmo clicando no texto ou no ícone, 
+    // ele suba até encontrar o <li> (faq__questions__item)
+    const elementoPai = elemento.target.closest('.faq__questions__item');
+    // const elementoPai = elemento.target.parentNode;
 
     elementoPai.classList.toggle(classe);
 }
