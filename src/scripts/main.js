@@ -1,64 +1,67 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Seleção dos elementos
+document.addEventListener('DOMContentLoaded', function(){
+
     const buttons = document.querySelectorAll('[data-tab-button]');
     const questions = document.querySelectorAll('[data-faq-question]');
-    const header = document.querySelector('header');
     const heroSection = document.querySelector('.hero');
+    const alturaHero = heroSection.clientHeight;
 
-    // --- Lógica do Header (Scroll) ---
-    if (heroSection && header) {
-        const alturaHero = heroSection.clientHeight;
-
-        window.addEventListener('scroll', function() {
-            const posicaoAtual = window.scrollY;
-
-            if (posicaoAtual < alturaHero) {
-                header.classList.add('header--is-hidden');
-            } else {
-                header.classList.remove('header--is-hidden');
-            }
-        });
+    window.addEventListener('scroll', function() {
+        const posicaoAtual = window.scrollY;
+        if (posicaoAtual < alturaHero) {
+            ocultaElementosDoHeader();
+        } else {
+            exibeElementosDoHeader();
+        }
+    })
+    
+    // Seção de atrações, programação das abasS
+    for (let i = 0; i < buttons.length; i++){
+        buttons[i].addEventListener('click', function(botao) {
+            const abaAlvo = botao.target.dataset.tabButton;
+            const aba = document.querySelector(`[data-tab-id=${abaAlvo}]`);
+            escondeTodasAbas();
+            aba.classList.add('shows__list--is-active');
+            removeBotaoAtivo();
+            botao.target.classList.add('shows__tabs__button--is-active');
+        })
     }
 
-    // --- Seção de Atrações (Abas) ---
-    buttons.forEach(botao => {
-        botao.addEventListener('click', function(e) {
-            const abaAlvo = e.target.dataset.tabButton;
-            const aba = document.querySelector(`[data-tab-id=${abaAlvo}]`);
-            
-            escondeTodasAbas();
-            if (aba) aba.classList.add('shows__list--is-active');
-            
-            removeBotaoAtivo();
-            e.target.classList.add('shows__tabs__button--is-active');
-        });
-    });
+    // Seção FAQ, accordion
+    for (let i = 0; i < questions.length; i++) {
+        questions[i].addEventListener('click', abreOuFechaResposta);
+    }
+})
 
-    // --- Seção FAQ (Accordion) ---
-    questions.forEach(question => {
-        question.addEventListener('click', abreOuFechaResposta);
-    });
-});
+function ocultaElementosDoHeader() {
+    const header = document.querySelector('header');
+    header.classList.add('header--is-hidden');
+}
 
-// Funções Auxiliares
-function abreOuFechaResposta(event) {
+function exibeElementosDoHeader() {
+    const header = document.querySelector('header');
+    header.classList.remove('header--is-hidden');
+
+}
+
+function abreOuFechaResposta(elemento) {
     const classe = 'faq__questions__item--is-open';
-    // currentTarget é sempre a div [data-faq-question] que recebeu o evento
-    const elementoPai = event.currentTarget.parentNode;
-
+    const elementoPai = elemento.target.parentNode;
     elementoPai.classList.toggle(classe);
+
 }
 
 function removeBotaoAtivo() {
     const buttons = document.querySelectorAll('[data-tab-button]');
-    buttons.forEach(button => {
-        button.classList.remove('shows__tabs__button--is-active');
-    });
+    for (let i = 0; i < buttons.length; i++) {
+        buttons[i].classList.remove('shows__tabs__button--is-active');
+    }
 }
 
 function escondeTodasAbas() {
     const tabsContainer = document.querySelectorAll('[data-tab-id]');
-    tabsContainer.forEach(tab => {
-        tab.classList.remove('shows__list--is-active');
-    });
+    for (let i = 0; i < tabsContainer.length; i++){
+        tabsContainer[i].classList.remove('shows__list--is-active')
+
+    }
+
 }
